@@ -154,15 +154,37 @@ function fixInternalLinks() {
     const links = contentDiv.querySelectorAll('a');
     links.forEach(link => {
         const href = link.getAttribute('href');
-        if (href && !href.startsWith('http') && !href.startsWith('#') && href.endsWith('.html')) {
-            link.addEventListener('click', async (e) => {
-                e.preventDefault();
-                const item = tocData.find(item => item.url === href);
-                await loadChapter(href, item ? item.title : null);
-                if (item) {
-                    saveProgress(tocData.indexOf(item));
-                }
-            });
+        if (href && !href.startsWith('http') && !href.startsWith('mailto:')) {
+            // Handle anchor links within same page
+            if (href.startsWith('#')) {
+                // Keep default behavior for same-page anchors
+                return;
+            }
+            
+            // Handle links to other chapters (with or without anchors)
+            const [filename, anchor] = href.split('#');
+            
+            if (filename && filename.endsWith('.html')) {
+                link.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const item = tocData.find(item => item.url === filename);
+                    await loadChapter(filename, item ? item.title : null);
+                    
+                    // Scroll to anchor if present
+                    if (anchor) {
+                        setTimeout(() => {
+                            const target = document.getElementById(anchor);
+                            if (target) {
+                                target.scrollIntoView({ behavior: 'smooth' });
+                            }
+                        }, 100);
+                    }
+                    
+                    if (item) {
+                        saveProgress(tocData.indexOf(item));
+                    }
+                });
+            }
         }
     });
 }
