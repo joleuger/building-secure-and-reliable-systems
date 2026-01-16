@@ -12,7 +12,7 @@ https://sre.google/books.
 
 This is not an officially supported Google product.
 
-To read the book, see the [Table of Contents](https://google.github.io/building-secure-and-reliable-systems/raw/toc.html).
+To read the book in dark mode, see the [Table of Contents](https://joleuger.github.io/building-secure-and-reliable-systems/reader.html).
 
 <center>
 <div style="width:50%">
